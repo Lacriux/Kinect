@@ -1,0 +1,6 @@
+1. qjackctl &
+2. darle INICIAR
+3. abrir amsynth &
+4. make play
+5. hacer conexion de midi through a amsynth
+
