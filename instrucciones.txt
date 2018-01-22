@@ -1,7 +1,8 @@
 Estas instrucciones fueron creadas para el uso de el Kinect
 Actualizadas el 22-Ene-2018 por Juan Pablo Andrade
 
-Para montar el kinect solo es necesario correr la aplicacion que se encuentraen el menu
+Si se encuentra en la computadora de electrizarte, y en la sesion de electrizarte, para montar el kinect solo es necesario correr la aplicacion que se encuentraen el menu,
+de lo contrario es necesario ejecutar el bash que se encuentra en este directorio. Este bash necesita permisos de administrador para funcionar(sudo), esto debido a que el servidor de audio no se puede inicializar si no se da este permiso.
 
 Si se desea cambiar la version en la que se utiliza, es necesario modificar el archivo Kinect.sh que se encuentra en este directorio
 En la ultima linea del ejecutable se cambia Kinect2.5 por el nombre de la carpeta de la version que se quiere trabajar. Para mas informacion sobre las versiones disponibles, dirigirse al archivo versiones.txt
