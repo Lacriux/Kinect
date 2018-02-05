@@ -1,8 +1,8 @@
 Estas son las versiones actuales que posee el Kinect ademas de una breve descripcion de cada una
-Actualizadas el 22-Ene-2018 por Juan Pablo Andrade
+Actualizadas el 05-Feb-2018 por Juan Pablo Andrade
 
 
 Kinect2.0 - Es la version base, que cuenta solo con la cuadricula de 4X4 (no funciona)
 Kinect2.5 - Version actual del kinect, posee los modos Opus(3x3, tecla:p), diatonico mayor(2X4, tecla:m), diatonico menor(2x4, tecla:n), cromatico(4x4, tecla:g), para subir o bajar el tono se utilizan las teclas u y d
-Kinect2.6 - Version estable que incorpora el uso de la camara rgb del kinect para mostrar al usuario
-Kinect2.7 - Version en proceso que va a implementar el uso de volumen por distancia
+Kinect2.6 - Version que incorpora el uso de la camara rgb del kinect para mostrar al usuario
+Kinect2.7 - Ultima version estable que implementa el uso de volumen por distancia, posee 3 niveles depediendo que que tan cerca se encuetre el usuario de la camara

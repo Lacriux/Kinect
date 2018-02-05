@@ -30,5 +30,5 @@ sleep 2
 
 sudo jack_connect "amsynth:midi_in" "a2j:Midi Through [14] (capture): Midi Through Port-0"
 
-/home/electrizarte/Kinect/Kinect2.5/kinect_drumming/kinect_drumming.py
+/home/electrizarte/Kinect/Codigo/Kinect2.7/kinect_drumming/pruebas.py
 

@@ -34,6 +34,30 @@ def show_depth():
 	
 	return depth
 
+def show_depth2():
+	global threshold
+	global current_depth
+	
+	new_depth = current_depth + 25
+	
+	depth, timestamp = freenect.sync_get_depth()	
+	depth = 255 * np.logical_and(depth >= new_depth - threshold, depth <= new_depth + threshold)
+	depth = depth.astype(np.uint8)
+	
+	return depth
+
+def show_depth3():
+	global threshold
+	global current_depth
+	
+	new_depth = current_depth + 50
+	
+	depth, timestamp = freenect.sync_get_depth()	
+	depth = 255 * np.logical_and(depth >= new_depth - threshold, depth <= new_depth + threshold)
+	depth = depth.astype(np.uint8)
+	
+	return depth
+
 def get_video():
 	video,_ = freenect.sync_get_video()
 
@@ -61,11 +85,13 @@ def find_centroid(imagen, imagen2):
 			
 			if (int(M['m00'])!=0):
 				centro = (int(M['m10']/M['m00'])+ 25,int(M['m01']/M['m00']))						
-				cv2.circle(imagen, centro, 16, 100, -1)
-				cv2.circle(imagen2, centro, 16, 100, -1)
+				cv2.circle(imagen, centro, 16, (255,255,255), -1)
+				cv2.circle(imagen2, centro, 16, (255,255,255), -1)
 				list_centros.append(centro)	
 	
 	return {'img':imagen, 'centr':list_centros, 'img2': imagen2}
+
+
 
 def draw_lines_p(imagen): #draws lines to divide the camara for user
 	
@@ -222,7 +248,7 @@ def flip_image(imagen):
 	
 	return imagen
 
-def send_midi_message_p(cuadrantes, nota_inicial=60):
+def send_midi_message_p(cuadrantes, volume, nota_inicial=60):
 	global t0, t1
 	#   |   | 
 	# 1	| 2 | 3	
@@ -232,14 +258,14 @@ def send_midi_message_p(cuadrantes, nota_inicial=60):
 	#https://mido.readthedocs.org/en/latest/
 	
 	#definicion de notas
-	f4 = Message("note_on", note=nota_inicial)
-	f40 = Message("note_off", note=nota_inicial)
+	f4 = Message("note_on", note=nota_inicial, velocity=volume)
+	f40 = Message("note_off", note=nota_inicial, velocity=volume)
 	
-	g4 = Message("note_on", note=(nota_inicial+2))
-	g40 = Message("note_off", note=(nota_inicial+2))
+	g4 = Message("note_on", note=(nota_inicial+2), velocity=volume)
+	g40 = Message("note_off", note=(nota_inicial+2), velocity=volume)
 
-	a4 = Message("note_on", note=(nota_inicial+4))
-	a40 = Message("note_off", note=(nota_inicial+4))
+	a4 = Message("note_on", note=(nota_inicial+4), velocity=volume)
+	a40 = Message("note_off", note=(nota_inicial+4), velocity=volume)
 	
 	
 	if (1 in cuadrantes):
@@ -257,7 +283,7 @@ def send_midi_message_p(cuadrantes, nota_inicial=60):
 	else:
 		output.send(a40)
 
-def send_midi_message_g(cuadrantes, nota_inicial=60):
+def send_midi_message_g(cuadrantes, volume, nota_inicial=60):
 	global t0, t1
 	# 1 | 2 | 3 | 4
 	#---------------
@@ -271,50 +297,50 @@ def send_midi_message_g(cuadrantes, nota_inicial=60):
 	#https://mido.readthedocs.org/en/latest/
 	
 	#definicion de notas
-	c4 = Message("note_on", note=nota_inicial)
-	c40 = Message("note_off", note=nota_inicial)
+	c4 = Message("note_on", note=nota_inicial, velocity=volume)
+	c40 = Message("note_off", note=nota_inicial, velocity=volume)
 
-	c4s = Message("note_on", note=nota_inicial+1)
-	c4s0 = Message("note_off", note=nota_inicial+1)
+	c4s = Message("note_on", note=nota_inicial+1, velocity=volume)
+	c4s0 = Message("note_off", note=nota_inicial+1, velocity=volume)
 	
-	d4 = Message("note_on", note=(nota_inicial+2))
-	d40 = Message("note_off", note=(nota_inicial+2))
+	d4 = Message("note_on", note=(nota_inicial+2), velocity=volume)
+	d40 = Message("note_off", note=(nota_inicial+2), velocity=volume)
 
-	d4s = Message("note_on", note=(nota_inicial+3))
-	d4s0 = Message("note_off", note=(nota_inicial+3))
+	d4s = Message("note_on", note=(nota_inicial+3), velocity=volume)
+	d4s0 = Message("note_off", note=(nota_inicial+3), velocity=volume)
 
-	e4 = Message("note_on", note=(nota_inicial+4))
-	e40 = Message("note_off", note=(nota_inicial+4))
+	e4 = Message("note_on", note=(nota_inicial+4), velocity=volume)
+	e40 = Message("note_off", note=(nota_inicial+4), velocity=volume)
 
-	f4 = Message("note_on", note=(nota_inicial+5))
-	f40 = Message("note_off", note=(nota_inicial+5))
+	f4 = Message("note_on", note=(nota_inicial+5), velocity=volume)
+	f40 = Message("note_off", note=(nota_inicial+5), velocity=volume)
 	
-	f4s = Message("note_on", note=(nota_inicial+6))
-	f4s0 = Message("note_off", note=(nota_inicial+6))
+	f4s = Message("note_on", note=(nota_inicial+6), velocity=volume)
+	f4s0 = Message("note_off", note=(nota_inicial+6), velocity=volume)
 
-	g4 = Message("note_on", note=(nota_inicial+7))
-	g40 = Message("note_off", note=(nota_inicial+7))
+	g4 = Message("note_on", note=(nota_inicial+7), velocity=volume)
+	g40 = Message("note_off", note=(nota_inicial+7), velocity=volume)
 	
-	g4s = Message("note_on", note=(nota_inicial+8))
-	g4s0 = Message("note_off", note=(nota_inicial+8))
+	g4s = Message("note_on", note=(nota_inicial+8), velocity=volume)
+	g4s0 = Message("note_off", note=(nota_inicial+8), velocity=volume)
 
-	a4 = Message("note_on", note=(nota_inicial+9))
-	a40 = Message("note_off", note=(nota_inicial+9))
+	a4 = Message("note_on", note=(nota_inicial+9), velocity=volume)
+	a40 = Message("note_off", note=(nota_inicial+9), velocity=volume)
 	
-	a4s = Message("note_on", note=(nota_inicial+10))
-	a4s0 = Message("note_off", note=(nota_inicial+10))
+	a4s = Message("note_on", note=(nota_inicial+10), velocity=volume)
+	a4s0 = Message("note_off", note=(nota_inicial+10), velocity=volume)
 	
-	b4 = Message("note_on", note=(nota_inicial+11))
-	b40 = Message("note_off", note=(nota_inicial+11))
+	b4 = Message("note_on", note=(nota_inicial+11), velocity=volume)
+	b40 = Message("note_off", note=(nota_inicial+11), velocity=volume)
 	
-	c5 = Message("note_on", note=(nota_inicial+12))
-	c50 = Message("note_off", note=(nota_inicial+12))
+	c5 = Message("note_on", note=(nota_inicial+12), velocity=volume)
+	c50 = Message("note_off", note=(nota_inicial+12), velocity=volume)
 
-	c5s = Message("note_on", note=nota_inicial+13)
-	c5s0 = Message("note_off", note=nota_inicial+13)
+	c5s = Message("note_on", note=nota_inicial+13, velocity=volume)
+	c5s0 = Message("note_off", note=nota_inicial+13, velocity=volume)
 	
-	d5 = Message("note_on", note=(nota_inicial+14))
-	d50 = Message("note_off", note=(nota_inicial+14))
+	d5 = Message("note_on", note=(nota_inicial+14), velocity=volume)
+	d50 = Message("note_off", note=(nota_inicial+14),velocity=volume)
 	
 	if (1 in cuadrantes):
 		output.send(c4)
@@ -391,38 +417,38 @@ def send_midi_message_g(cuadrantes, nota_inicial=60):
 	else:
 		output.send(d50)
 		
-def send_midi_message_m(cuadrantes, nota_inicial=60):
+def send_midi_message_m(cuadrantes, volume, nota_inicial=60):
 	# 1 | 2 | 3 | 4 
 	#---------------
 	# 5 | 6 | 7 | 8 
 	
 	#definicion de notas
-	c4 = Message("note_on", note=nota_inicial)
-	c40 = Message("note_off", note=nota_inicial)
+	c4 = Message("note_on", note=nota_inicial, velocity=volume)
+	c40 = Message("note_off", note=nota_inicial, velocity=volume)
 	
-	d4 = Message("note_on", note=(nota_inicial+2))
-	d40 = Message("note_off", note=(nota_inicial+2))
+	d4 = Message("note_on", note=(nota_inicial+2), velocity=volume)
+	d40 = Message("note_off", note=(nota_inicial+2), velocity=volume)
 
-	e4 = Message("note_on", note=(nota_inicial+4))
-	e40 = Message("note_off", note=(nota_inicial+4))
+	e4 = Message("note_on", note=(nota_inicial+4), velocity=volume)
+	e40 = Message("note_off", note=(nota_inicial+4), velocity=volume)
 	
-	f4 = Message("note_on", note=(nota_inicial+5))
-	f40 = Message("note_off", note=(nota_inicial+5))
+	f4 = Message("note_on", note=(nota_inicial+5), velocity=volume)
+	f40 = Message("note_off", note=(nota_inicial+5), velocity=volume)
 	
-	g4 = Message("note_on", note=(nota_inicial+7))
-	g40 = Message("note_off", note=(nota_inicial+7))
+	g4 = Message("note_on", note=(nota_inicial+7), velocity=volume)
+	g40 = Message("note_off", note=(nota_inicial+7), velocity=volume)
 	
-	a4 = Message("note_on", note=(nota_inicial+9))
-	a40 = Message("note_off", note=(nota_inicial+9))
+	a4 = Message("note_on", note=(nota_inicial+9), velocity=volume)
+	a40 = Message("note_off", note=(nota_inicial+9), velocity=volume)
 	
-	b4 = Message("note_on", note=(nota_inicial+11))
-	b40 = Message("note_off", note=(nota_inicial+11))
+	b4 = Message("note_on", note=(nota_inicial+11), velocity=volume)
+	b40 = Message("note_off", note=(nota_inicial+11), velocity=volume)
 	
-	c5 = Message("note_on", note=(nota_inicial+12))
-	c50 = Message("note_off", note=(nota_inicial+12))
+	c5 = Message("note_on", note=(nota_inicial+12), velocity=volume)
+	c50 = Message("note_off", note=(nota_inicial+12), velocity=volume)
 	
-	d5 = Message("note_on", note=(nota_inicial+14))
-	d50 = Message("note_off", note=(nota_inicial+14))
+	d5 = Message("note_on", note=(nota_inicial+14), velocity=volume)
+	d50 = Message("note_off", note=(nota_inicial+14), velocity=volume)
 	
 	if (1 in cuadrantes):
 		output.send(c4)
@@ -469,38 +495,38 @@ def send_midi_message_m(cuadrantes, nota_inicial=60):
 	else:
 		output.send(d50)
 
-def send_midi_message_m2(cuadrantes, nota_inicial=60):
+def send_midi_message_m2(cuadrantes, volume, nota_inicial=60):
 	# 1 | 2 | 3 | 4 
 	#---------------
 	# 5 | 6 | 7 | 8 
 	
 	#definicion de notas
-	c4 = Message("note_on", note=nota_inicial)
-	c40 = Message("note_off", note=nota_inicial)
+	c4 = Message("note_on", note=nota_inicial, velocity=volume)
+	c40 = Message("note_off", note=nota_inicial, velocity=volume)
 	
-	d4 = Message("note_on", note=(nota_inicial+2))
-	d40 = Message("note_off", note=(nota_inicial+2))
+	d4 = Message("note_on", note=(nota_inicial+2), velocity=volume)
+	d40 = Message("note_off", note=(nota_inicial+2), velocity=volume)
 
-	e4 = Message("note_on", note=(nota_inicial+3))
-	e40 = Message("note_off", note=(nota_inicial+3))
+	e4 = Message("note_on", note=(nota_inicial+3), velocity=volume)
+	e40 = Message("note_off", note=(nota_inicial+3), velocity=volume)
 	
-	f4 = Message("note_on", note=(nota_inicial+5))
-	f40 = Message("note_off", note=(nota_inicial+5))
+	f4 = Message("note_on", note=(nota_inicial+5), velocity=volume)
+	f40 = Message("note_off", note=(nota_inicial+5), velocity=volume)
 	
-	g4 = Message("note_on", note=(nota_inicial+7))
-	g40 = Message("note_off", note=(nota_inicial+7))
+	g4 = Message("note_on", note=(nota_inicial+7), velocity=volume)
+	g40 = Message("note_off", note=(nota_inicial+7), velocity=volume)
 	
-	a4 = Message("note_on", note=(nota_inicial+8))
-	a40 = Message("note_off", note=(nota_inicial+8))
+	a4 = Message("note_on", note=(nota_inicial+8), velocity=volume)
+	a40 = Message("note_off", note=(nota_inicial+8), velocity=volume)
 	
-	b4 = Message("note_on", note=(nota_inicial+10))
-	b40 = Message("note_off", note=(nota_inicial+10))
+	b4 = Message("note_on", note=(nota_inicial+10), velocity=volume)
+	b40 = Message("note_off", note=(nota_inicial+10), velocity=volume)
 	
-	c5 = Message("note_on", note=(nota_inicial+12))
-	c50 = Message("note_off", note=(nota_inicial+12))
+	c5 = Message("note_on", note=(nota_inicial+12), velocity=volume)
+	c50 = Message("note_off", note=(nota_inicial+12), velocity=volume)
 	
-	d5 = Message("note_on", note=(nota_inicial+14))
-	d50 = Message("note_off", note=(nota_inicial+14))
+	d5 = Message("note_on", note=(nota_inicial+14), velocity=volume)
+	d50 = Message("note_off", note=(nota_inicial+14), velocity=volume)
 	
 	if (1 in cuadrantes):
 		output.send(c4)
@@ -779,6 +805,14 @@ def imprimir_notas_n(image, nota_inicial):
 	cv2.putText(image,notas2[6], (320,470), cv2.FONT_HERSHEY_SIMPLEX, 3, (255,255,255), 3)
 	cv2.putText(image,notas2[7], (480,470), cv2.FONT_HERSHEY_SIMPLEX, 3, (255,255,255), 3)
 
+def calc_vol(cuadrantes, cuadrantes2, cuadrantes3):
+	vol = 42
+	if cuadrantes2:
+		vol = 84
+	if cuadrantes:
+		vol = 127
+	return vol
+
 if __name__ == "__main__":
 	print "Presione 'q' para salir"
 	print "Para subir el tono presione u"
@@ -794,19 +828,29 @@ if __name__ == "__main__":
 	while 1:
 		
 		image = show_depth()
+		image4 = show_depth2()
+		image5 = show_depth3()
 		
 		image = flip_image(image)
+		image4 = flip_image(image4)
+		image5 = flip_image(image5)
 
 		image2 = get_video()
 		image2 = flip_image(image2)
 		
 		rslt_fc = find_centroid(image, image2)
+		rslt_fc2 = find_centroid(image4, image2)
+		rslt_fc3 = find_centroid(image5, image2)
 		
 		image = rslt_fc['img']
-		
 		image2 = rslt_fc['img2']
-		
 		centroides = rslt_fc['centr']
+
+		image4 = rslt_fc2['img']
+		centroides2 = rslt_fc2['centr']
+
+		image5 = rslt_fc3['img']
+		centroides3 = rslt_fc3['centr']
 
 		image3 = cv2.addWeighted(image2,0.5,blank_image,0.5,3)
 
@@ -828,26 +872,44 @@ if __name__ == "__main__":
 			#imprimir_notas_g(image2, nota_inicial)
 			imprimir_notas_g(image3, nota_inicial)
 		
-		if centroides:
+		if centroides or centroides2 or centroides3:
 			if(str_divisiones == "p"):
 				str_nota = 'f'
 				cuadrantes = get_cuadrantes_p(centroides)
-				send_midi_message_p(cuadrantes, nota_inicial)
+				cuadrantes2 = get_cuadrantes_p(centroides2)
+				cuadrantes3 = get_cuadrantes_p(centroides3)
+				volume = calc_vol(cuadrantes, cuadrantes2, cuadrantes3)
+				send_midi_message_p(cuadrantes, volume, nota_inicial)
 			elif(str_divisiones == "m"):
 				cuadrantes = get_cuadrantes_m(centroides)
-				send_midi_message_m(cuadrantes, nota_inicial)
+				cuadrantes2 = get_cuadrantes_m(centroides2)
+				cuadrantes3 = get_cuadrantes_m(centroides3)
+				volume = calc_vol(cuadrantes, cuadrantes2, cuadrantes3)
+				send_midi_message_m(cuadrantes3, volume, nota_inicial)
 			elif(str_divisiones == "m2"):
 				cuadrantes = get_cuadrantes_m(centroides)
-				send_midi_message_m2(cuadrantes, nota_inicial)
+				cuadrantes2 = get_cuadrantes_m(centroides2)
+				cuadrantes3 = get_cuadrantes_m(centroides3)
+				volume = calc_vol(cuadrantes, cuadrantes2, cuadrantes3)
+				send_midi_message_m2(cuadrantes3, volume, nota_inicial)
 			elif(str_divisiones == "g"):
 				cuadrantes = get_cuadrantes_g(centroides)
-				send_midi_message_g(cuadrantes, nota_inicial)
+				cuadrantes2 = get_cuadrantes_g(centroides2)
+				cuadrantes3 = get_cuadrantes_g(centroides3)
+				volume = calc_vol(cuadrantes, cuadrantes2, cuadrantes3);
+				send_midi_message_g(cuadrantes3, volume, nota_inicial)
 
-		#show_image(image2, "matching2")
-		#show_video(image2, "matching2")
+		#show_image(image, "vol max")
+		#show_video(image, "vol max")
+
+		#show_image(image4, "vol med")
+		#show_video(image4, "vol med")
+
+		#show_image(image5, "vol min")
+		#show_video(image5, "vol min")
 	
-		show_image(image3, "matching3")
-		show_video(image3, "matching3")
+		show_image(image3, "video")
+		show_video(image3, "video")
 
 		com = cv2.waitKey(10)
 		
